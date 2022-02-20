@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Vue.js tree view example</title>
+    <style></style>
+    <!-- Delete ".min" for console warnings in development -->
+    <script src="../../dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="app" @click="fn">{{ msg }} {{ test }} {{arr}}</div>
+    <script>
+      new Vue({
+        el: "#app",
+        data() {
+          return {
+            msg: "hello vue",
+            arr:[1,2,3],
+            obj: {},
+          };
+        },
+        methods: {
+          fn() {
+            console.log(this.obj);
+          },
+        },
+        computed: {
+          test() {
+            return this.msg + 123;
+          }
+        },
+        beforeCreate() {
+          window.aaa = this;
+        },
+      });
+    </script>
+  </body>
+</html>
