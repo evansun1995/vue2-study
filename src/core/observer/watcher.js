@@ -60,8 +60,7 @@ export default class Watcher {
       this.deep = !!options.deep
       this.user = !!options.user
       this.lazy = !!options.lazy
-      this.
-       !!options.sync
+      this.sync = !!options.sync
       this.before = options.before
     } else {
       this.deep = this.user = this.lazy = this.sync = false
