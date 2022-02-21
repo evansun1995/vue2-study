@@ -29,8 +29,8 @@
             return this.msg + 123;
           }
         },
-        beforeCreate() {
-          window.aaa = this;
+        mounted() {
+          console.log('msg',this._data)
         },
       });
     </script>

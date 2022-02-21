@@ -49,17 +49,20 @@ export default class Dep {
       // order
       subs.sort((a, b) => a.id - b.id)
     }
+    // subs 是 观察者（Watcher）的集合，循环去派发更新
     for (let i = 0, l = subs.length; i < l; i++) {
       subs[i].update()
     }
   }
-}
+} 
 
 // The current target watcher being evaluated.
 // This is globally unique because only one watcher
 // can be evaluated at a time.
 // 当前目标观察者正在被计算
 // target是全局独一无二的，因为同一时刻只有一个观察者会被计算
+// 这个对象是 watcher 的实例，在 触发实例的 get 方法时，会将 Dep.target 设置为实例本身
+// 然后调用 getter 函数，getter 函数中触发响应对象的 getter，从而触发依赖收集
 Dep.target = null
 const targetStack = []
 

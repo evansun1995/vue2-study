@@ -24,6 +24,7 @@ let uid = 0
  * and fires callback when the expression value changes.
  * This is used for both the $watch() api and directives.
  */
+// 
 export default class Watcher {
   vm: Component;
   expression: string;
@@ -52,6 +53,7 @@ export default class Watcher {
   ) {
     this.vm = vm
     if (isRenderWatcher) {
+      // 组件渲染有个统一 watcher，在 生命周期处理的 mountComponent 函数中处理
       vm._watcher = this
     }
     vm._watchers.push(this)
@@ -100,11 +102,12 @@ export default class Watcher {
    * Evaluate the getter, and re-collect dependencies.
    */
   get () {
-    console.log(this)
+    // 将自身插入到 dependencies 依赖的目标对象栈（targetStack）中
     pushTarget(this)
     let value
     const vm = this.vm
     try {
+      // 调用 getter 方法，会触发对应
       value = this.getter.call(vm, vm)
     } catch (e) {
       if (this.user) {
@@ -163,6 +166,8 @@ export default class Watcher {
    * Subscriber interface.
    * Will be called when a dependency changes.
    */
+  // 当依赖收集时，当前 watcher 实例会被添加至对应的 Dep 对象的 subs中
+  // 当对应数据更新时，会调用 watcher 实例的 update 方法
   update () {
     /* istanbul ignore else */
     if (this.lazy) {
@@ -170,7 +175,6 @@ export default class Watcher {
       // dirty === true ，是computed判断是否更新的依据
       this.dirty = true
     } else if (this.sync) {
-      // sync 表示同步，一般是 watch 使用
       this.run()
     } else {
       queueWatcher(this)

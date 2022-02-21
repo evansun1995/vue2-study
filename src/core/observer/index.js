@@ -163,7 +163,6 @@ export function defineReactive (
 ) {
   // dep 是用来做依赖收集的，有target、subs两个关键属性
   const dep = new Dep()
-
   // 获取一个对象上的自有属性，包括：value、writable、enumerable、configurable
   const property = Object.getOwnPropertyDescriptor(obj, key)
   // 如果该属性不可修改
@@ -193,12 +192,13 @@ export function defineReactive (
       // callHook、initData、$watch 等方法执行时，都会设置 Dep.target 的值
       // 同一时间段只会处理一个 Dep.target
       if (Dep.target) {
-        // 订阅当前观察者
+        // 依赖收集，将当前调用自身的 watcher 实例添加到依赖中
         dep.depend()
         if (childOb) {
+          // 如果 value 是个 对象或数组，继续做依赖收集
           childOb.dep.depend()
           if (Array.isArray(value)) {
-            // 递归给后代节点订阅当前观察者
+            // 递归给后代节点做依赖收集
             dependArray(value)
           }
         }
@@ -216,6 +216,7 @@ export function defineReactive (
         customSetter()
       }
       // #7981: for accessor properties without setter
+      // 意思是访问器属性没有 setter？
       if (getter && !setter) return
       if (setter) {
         setter.call(obj, newVal)
